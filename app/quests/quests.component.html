@@ -1,0 +1,41 @@
+<ActionBar title="QuestRdy" class="action-bar">
+  <ActionItem (tap)="showSearch()">
+    <Button text="search"></Button>
+  </ActionItem>
+</ActionBar>
+
+<StackLayout class="page">
+  <!--SEARCH BAR-->
+  <StackLayout class="page" *ngIf="searchBar">
+    <SearchBar hint="Enter RS username" (submit)="onSubmit($event)" color="white" textFieldHintColor="white"></SearchBar>
+  </StackLayout>
+  <!--INFO-->
+  <StackLayout class="page" *ngIf="!quests.length && !errors.error">
+    <Label class="h3 m-t-15 p-5" text="Find out what quests you can do right now!" textWrap="true" textAlignment="center"></Label>
+    <Label class="h3 p-5" text="If you satisfy the requirements for a quest, you'll see it here" textWrap="true"
+      textAlignment="center"></Label>
+    <Label class="h3 p-5" text="Tap SEARCH and enter you RS username" textWrap="true" textAlignment="center"></Label>
+    <Label class="h3 p-5" text="Click on the quest you want to go to the RS Wiki for more info!" textWrap="true"
+      textAlignment="center"></Label>
+  </StackLayout>
+  <StackLayout class="page" *ngIf="errors.error">
+    <Label class="h3 m-t-15 p-5" text="{{errors.message}}" textWrap="true" textAlignment="center"></Label>
+  </StackLayout>
+  <!--LOADING ACTION-->
+  <ActivityIndicator *ngIf="busy" busy="{{busy}}" width="75" height="75" class="activity-indicator"></ActivityIndicator>
+
+  <StackLayout class="page" *ngIf="!busy && quests.length && !errors.error">
+    <!--QUESTS SUMMARY-->
+    <StackLayout orientation="horizontal">
+      <Label text="{{ 'Quests to do: ' + quests.length}}" fontSize="25"></Label>
+    </StackLayout>
+    <!--LIST OF QUESTS-->
+    <StackLayout class="page">
+      <ListView [items]="quests" class="list-group">
+        <ng-template let-quest="item">
+          <Label text="{{quest.title}}" class="list-group-item" (tap)="navigateToWiki(quest.title)"></Label>
+        </ng-template>
+      </ListView>
+    </StackLayout>
+  </StackLayout>
+</StackLayout>
